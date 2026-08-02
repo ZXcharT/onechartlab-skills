@@ -5,6 +5,8 @@
 - Rewrote the Chinese and English README files for ordinary users.
 - Added plain-language installation and workflow guides.
 - Moved protocol terminology and maintainer details behind linked documentation.
+- Replaced trigger-routing jargon with a sentence users can copy directly.
+- Added an optional advanced HanaAgent setup guide for frequent complex-task users.
 
 ## 0.1.0 — 2026-08-02
 

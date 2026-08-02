@@ -38,13 +38,13 @@ It is normally unnecessary for:
 
 ## Is it automatic?
 
-Once installed and enabled, HanaAgent may load the Skill automatically when a request is clearly complex. You do not need to mention its name every time.
+After installation, HanaAgent will try to use it for complex tasks. You do not need to mention its name every time.
+
+If it does not start automatically, simply say:
+
+> This task is complex. Please use Agent Cowork Control.
 
 It is not a background service and does not run on a schedule. For important work or actions that may affect external systems, it shows a plan and waits for approval. Installing the Skill does not authorize automatic publishing, permission expansion, dependency installation, or account access.
-
-You can also request it explicitly:
-
-> Use Agent Cowork Control for this task. Plan first, delegate bounded work, and verify the result before delivery.
 
 ## Installation
 
@@ -79,6 +79,7 @@ Most users can stop here. The following documents cover installation details, in
 - [Installation, updates, and removal](docs/INSTALLATION.md)
 - [How it works](docs/HOW-IT-WORKS.md)
 - [Platform compatibility](docs/COMPATIBILITY.md)
+- [Advanced HanaAgent setup](docs/HANAAGENT-SETUP.md)
 - [Security policy](SECURITY.md)
 - [Contributing](CONTRIBUTING.md)
 - [Project standards](docs/STANDARDS.md)
