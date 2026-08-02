@@ -8,7 +8,7 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT.parent.parent / "dist"
+OUT = ROOT / "dist"
 NAME = "onechartlab-skills"
 VERSION = "0.1.0"
 ALLOWED_ROOT_FILES = {

@@ -1,15 +1,12 @@
 # Changelog
 
-## Unreleased
-
-- Rewrote the Chinese and English README files for ordinary users.
-- Added plain-language installation and workflow guides.
-- Moved protocol terminology and maintainer details behind linked documentation.
-- Replaced trigger-routing jargon with a sentence users can copy directly.
-- Added an optional advanced HanaAgent setup guide for frequent complex-task users.
-
 ## 0.1.0 — 2026-08-02
 
-- Initial public candidate repository.
-- Added HanaAgent-targeted Agent Cowork Control Skill and public protocols.
-- Added deterministic T01–T14 policy harness, repository checks, local ZIP builder and packaging evidence workflow.
+- Published the first OneChartLab Skills repository.
+- Added the HanaAgent-targeted Agent Cowork Control Skill and its public protocols.
+- Added deterministic T01–T14 behavior tests, repository checks, archive verification and local release tools.
+- Added Chinese-first and English user documentation.
+- Added plain-language installation, first-use, automatic-use and workflow guides.
+- Made “send the repository URL to the Agent” the primary installation method.
+- Added an optional advanced HanaAgent setup guide.
+- Added MIT licensing, contribution guidance, security policy, compatibility boundaries and rule mapping.

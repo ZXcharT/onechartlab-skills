@@ -48,17 +48,19 @@
 
 ## 安装
 
-最方便的方式是下载正式版本中的：
+最简单的方式，是把这个仓库网址发给 HanaAgent：
 
 ```text
-agent-cowork-control.skill
+https://github.com/ZXcharT/onechartlab-skills
 ```
 
-把 `.skill` 文件拖进 HanaAgent 聊天窗口上传，然后发送：
+然后说：
 
-> 请安装这个 Skill。
+> 请打开这个仓库，安装里面的 Agent Cowork Control Skill。
 
-如果当前还没有 Release 下载页，也可以从源码安装。详细步骤见 [安装、更新与卸载](docs/INSTALLATION.md)。
+HanaAgent 会找到仓库中的 Skill 并完成安装。
+
+如果当前 Agent 不支持从 GitHub 仓库安装，也可以从 Release 页面下载 `agent-cowork-control.skill`，拖进聊天窗口后说“请安装这个 Skill”。其他方式见 [安装、更新与卸载](docs/INSTALLATION.md)。
 
 ## 第一次使用
 

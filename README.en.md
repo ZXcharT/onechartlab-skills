@@ -48,17 +48,19 @@ It is not a background service and does not run on a schedule. For important wor
 
 ## Installation
 
-The simplest installation uses the official release asset:
+The simplest method is to send this repository URL to HanaAgent:
 
 ```text
-agent-cowork-control.skill
+https://github.com/ZXcharT/onechartlab-skills
 ```
 
-Drag the `.skill` file into a HanaAgent chat, then send:
+Then say:
 
-> Install this Skill.
+> Open this repository and install the Agent Cowork Control Skill inside it.
 
-If a Release download is not available yet, install from source by following [Installation, updates, and removal](docs/INSTALLATION.md).
+HanaAgent will locate the Skill in the repository and install it.
+
+If the current Agent cannot install from a GitHub repository, download `agent-cowork-control.skill` from the Release page, drag it into the chat, and ask HanaAgent to install it. See [Installation, updates, and removal](docs/INSTALLATION.md) for other methods.
 
 ## First use
 

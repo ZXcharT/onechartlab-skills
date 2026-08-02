@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
-from build_release import include
+from build_release import include, OUT
 from verify_artifacts import safe_member
 
 REQUIRED = ["README.md","README.en.md","LICENSE","CONTRIBUTING.md","SECURITY.md","CHANGELOG.md",".gitignore","docs/STANDARDS.md","docs/COMPATIBILITY.md","docs/INSTALLATION.md","docs/HOW-IT-WORKS.md","docs/HANAAGENT-SETUP.md","docs/RELEASE.md","docs/RULE-MAPPING.md","scripts/check_repo.py","scripts/policy_harness.py","scripts/build_release.py","scripts/verify_artifacts.py","tests/test_policy.py","tests/test_repository.py","skills/agent-cowork-control/SKILL.md","skills/agent-cowork-control/references/behavior-contract.md"]
@@ -57,6 +57,7 @@ class RepositoryTests(unittest.TestCase):
                 if re.search(pat,t): hits.append(f"{p.relative_to(ROOT)}:{pat}")
         self.assertEqual([],hits,"privacy/personalization leak: "+"; ".join(hits))
     def test_archive_allowlist_and_exclusion_rules(self):
+        self.assertEqual(ROOT/"dist", OUT)
         self.assertTrue(include(ROOT/"README.md"))
         self.assertTrue(include(ROOT/"skills/agent-cowork-control/SKILL.md"))
         for rel in ["notes.md", ".cache/x", ".pytest_cache/x", ".mypy_cache/x", ".DS_Store", "logs/run.txt", "docs/debug.log", ".env"]:
