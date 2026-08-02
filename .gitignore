@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+*.log
+*.zip
+SHA256SUMS
+runs/
+dist/
+evidence/
+.env
+.env.*
+*.session
