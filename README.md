@@ -2,50 +2,90 @@
 
 [English](README.en.md)
 
-OneChartLab Skills 是一组可审阅、可测试、可本地打包的 Agent Skills。首个 Skill [Agent Cowork Control](skills/agent-cowork-control/SKILL.md) 为 HanaAgent 的复杂协作任务提供 Plan、委派、证据、验证与沟通边界。
+## Agent Cowork Control 是什么
 
-## 适用与不适用
+> 让 AI 遇到大任务时，先把事情想清楚、拆开分工，再检查结果，而不是一个助手从头莽到尾。
 
-适用于需要六段 Plan、子代理委派、跨来源证据、跨模块写入或独立验证的复杂任务。它让主代理保有目标、验收和用户沟通责任，并要求显式选择委派 Agent、最小权限、Canary、隔离运行目录和验证门禁。
+安装后，当你让 HanaAgent 处理一项比较复杂的工作时，它可以：
 
-不适用于闲聊、纯读取、简单问答、单代理可完成的研究或小范围一次性修改。它不替代宿主的权限系统；Skill 中的门禁是政策约束，除非宿主另有硬执行机制。
+- 先告诉你准备怎么做，等你确认后再开始；
+- 把查资料、改文件、运行检查等工作分给不同助手；
+- 遇到工具不可用、权限不足或结果不可靠时及时告诉你；
+- 在交付前检查文件、数据和测试结果；
+- 由主助手统一汇总结论，对最终结果负责。
 
-## 状态说明
+它不是一个独立应用，而是一套提供给 AI Agent 使用的工作方法。
 
-| 状态 | 含义 |
-|---|---|
-| 目标运行时 | `agent-cowork-control` 按 HanaAgent 的工具与线程语义编写；公开候选已通过结构、策略 trace 与打包测试，正式发布前仍需做一次干净安装验证。|
-| 静态格式参考 | Claude Code、Codex 仅作为开放目录/Skill 格式参考，未做运行验证。|
-| 未验证 | 其他 Agent 运行时、其他宿主工具语义及跨平台行为不作承诺。|
+## 适合什么场景
 
-## HanaAgent 安装与首次使用
+例如：
 
-1. 将本仓库中的 `skills/agent-cowork-control/` 放入 HanaAgent 的 Skill 目录，保留目录名和 `SKILL.md`。
-2. 在每个获批的复杂任务 Plan 中，由 request owner 或 approver 明确解析 `delegate_agent_id`。不可默认猜测、替换或回退到其他 Agent。
-3. 默认继承所选 delegate Agent 的配置默认模型；模型覆盖需要用户明确批准并记录。
-4. 将任务级 `run_root` 指向用户授权工作区下的 `runs/`，为高价值写任务创建唯一运行目录和 `FINAL.md`。
-5. 首次调用只在满足“适用”条件时加载 Skill，并按 `SKILL → task-packets → role protocol → communication protocol` 顺序执行。
+- 调查一个行业或公司，需要同时查新闻、公告、财务和研报；
+- 把一个本地项目整理成可以公开发布的 GitHub 项目；
+- 制作涉及多个文件、数据和检查步骤的报告、网站或工具；
+- 对重要结果做一次独立检查，避免遗漏和自说自话；
+- 一项工作既要研究，又要执行，还要验证最后是否真的完成。
 
-## 升级、卸载与排错
+## 哪些情况不会启动
 
-**升级**：替换整个 `skills/agent-cowork-control/` 目录；若使用完整仓库，在仓库根运行 `python3 scripts/check_repo.py`。保留本地任务证据，不把本机配置或运行轨迹放入发布包。
+下面这些简单任务通常不需要它：
 
-**卸载**：从 HanaAgent Skill 目录移除该目录；不会删除已创建的任务运行目录。按你的保留策略单独清理运行产物。
+- 日常聊天或简单问答；
+- 翻译、改一句话、解释一个概念；
+- 读取或总结一个文件；
+- 修改一个很小、很明确的地方；
+- 一个助手很快就能完成的任务。
 
-**排错**：先确认目录名与 frontmatter `name` 相同；确认宿主提供 `subagent`、续线程、关闭线程、状态检查和工作流身份语义；确认 Plan 写入了 `delegate_agent_id` 与 `run_root`。结构化/MCP 工具不可用时应看到 `BLOCKED`，而不是网页替代。
+## 它是自动的吗
 
-## 开发与发布
+安装并启用后，HanaAgent 会根据你的任务判断是否需要加载这个 Skill。你不必每次都说出它的名字。
 
-- [贡献指南](CONTRIBUTING.md)
+但它不是后台服务，也不会自己定时运行。对于重要、复杂或可能影响外部系统的工作，它会先把计划展示给你，得到确认后才继续。它不会因为安装了这个 Skill 就自动发布文件、扩大权限、安装依赖或访问其他账户。
+
+如果你希望明确使用，也可以直接说：
+
+> 这项任务比较复杂，请使用 Agent Cowork Control，先规划，再让助手分工完成并检查结果。
+
+## 安装
+
+最方便的方式是下载正式版本中的：
+
+```text
+agent-cowork-control.skill
+```
+
+把 `.skill` 文件拖进 HanaAgent 聊天窗口上传，然后发送：
+
+> 请安装这个 Skill。
+
+如果当前还没有 Release 下载页，也可以从源码安装。详细步骤见 [安装、更新与卸载](docs/INSTALLATION.md)。
+
+## 第一次使用
+
+安装后可以直接提出正常需求，不需要学习固定命令。例如：
+
+> 帮我把这个项目整理并开源。先确认需要做哪些工作，查资料、修改文件和检查可以交给助手分工完成。
+
+或者：
+
+> 帮我深入研究这家公司。需要核对不同来源，最后把关键结论、证据和不确定的地方分开写清楚。
+
+HanaAgent 判断任务足够复杂时，会先给出计划。你确认后，它才会进入正式执行。
+
+## 了解更多
+
+普通使用到这里就够了。以下内容面向想了解工作原理、兼容性或参与维护的用户：
+
+- [安装、更新与卸载](docs/INSTALLATION.md)
+- [它如何工作](docs/HOW-IT-WORKS.md)
+- [平台兼容性](docs/COMPATIBILITY.md)
 - [安全政策](SECURITY.md)
-- [兼容性边界](docs/COMPATIBILITY.md)
-- [标准](docs/STANDARDS.md)
-- [原始规则到公开版映射](docs/RULE-MAPPING.md)
-- [本地发布流程](docs/RELEASE.md)
+- [贡献指南](CONTRIBUTING.md)
+- [项目标准](docs/STANDARDS.md)
+- [原始规则到公开版的映射](docs/RULE-MAPPING.md)
+- [维护者发布流程](docs/RELEASE.md)
 - [变更记录](CHANGELOG.md)
 
-只需 Python 标准库：`python3 scripts/check_repo.py`；构建本地 ZIP：`python3 scripts/build_release.py`。
+## 许可
 
-## 许可与品牌
-
-代码和文档采用 [MIT](LICENSE)，版权为 © 2026 ZXcharT。MIT 许可授权使用、复制和修改软件；它本身不授予 ZXcharT、OneChartLab 或相关标识的商标、品牌背书或名称使用权。衍生项目应避免暗示官方关联。
+代码和文档采用 [MIT License](LICENSE)，版权为 © 2026 ZXcharT。

@@ -1,45 +1,91 @@
 # OneChartLab Skills
 
-[Simplified Chinese](README.md)
+[简体中文](README.md)
 
-OneChartLab Skills is a reviewable, testable, locally packageable collection of Agent Skills. Its first Skill, [**Agent Cowork Control**](skills/agent-cowork-control/SKILL.md), defines planning, delegation, evidence, validation, and communication boundaries for complex HanaAgent work.
+## What is Agent Cowork Control?
 
-## When to use it
+> It helps an AI handle large tasks by planning first, delegating clear parts of the work, and checking the result before delivery.
 
-Use it for work requiring a six-section Plan, delegated agents, multi-source evidence, multi-module writing, or independent validation. The main Agent retains responsibility for goals, acceptance, and user communication. The Skill requires an explicit delegate identity, least privilege, a structured-tool Canary, isolated run directories, and validation gates.
+After installation, it can help HanaAgent:
 
-Do not use it for chat, read-only work, simple questions, research one Agent can complete, or small one-off edits. Skill and prompt gates are policy controls, not claims of system-level enforcement unless the host independently provides it.
+- show you a plan and wait for confirmation before starting important work;
+- assign research, file editing, and checks to different helper agents;
+- report unavailable tools, insufficient permissions, or unreliable evidence;
+- verify files, data, and tests before delivery;
+- keep one main Agent responsible for the final result.
 
-## Verification status
+It is not a standalone application. It is a working method for AI agents.
 
-| Status | Meaning |
-|---|---|
-| Runtime target | `agent-cowork-control` is written for HanaAgent semantics. The public candidate passes structure, policy-trace, and package tests; a clean installation check is still required before release. |
-| Static reference | Claude Code and Codex are referenced only for open Skill directory formats; runtime behavior is unverified. |
-| Unverified | Other Agent runtimes, host tool semantics, and cross-platform execution are not claimed. |
+## Good use cases
 
-## HanaAgent install and first configuration
+Examples include:
 
-1. Copy `skills/agent-cowork-control/` into the HanaAgent Skill directory without changing its directory name or `SKILL.md`.
-2. For every approved complex-task Plan, have the request owner or approver explicitly resolve and record `delegate_agent_id`. Never guess, substitute, or silently fall back.
-3. Inherit the selected delegate Agent's configured default model. Record an override only after explicit user approval.
-4. Set task-level `run_root` to `runs/` under a user-authorized workspace. High-value writing gets one isolated run directory and `FINAL.md`.
-5. On first invocation, load resources in this order: `SKILL → task-packets → role protocol → communication protocol` before an event occurs.
+- researching a company or industry across news, filings, financials, and reports;
+- preparing a local project for a public GitHub release;
+- building a report, website, or tool that spans multiple files and checks;
+- independently reviewing an important result for omissions;
+- work that combines research, execution, and final verification.
 
-## Upgrade, uninstall, troubleshoot
+## When it should not start
 
-**Upgrade:** replace the whole `skills/agent-cowork-control/` directory. When using the full repository, run `python3 scripts/check_repo.py` from the repository root. Keep local task evidence out of release packages.
+It is normally unnecessary for:
 
-**Uninstall:** remove the Skill directory from HanaAgent. Existing task run directories are not removed.
+- casual conversation or simple questions;
+- translation, rewriting one sentence, or explaining a concept;
+- reading or summarizing one file;
+- a small, clearly scoped edit;
+- work one Agent can finish quickly.
 
-**Troubleshoot:** verify frontmatter name equals directory name; verify host support for creating, continuing, closing, and inspecting delegated threads plus workflow identity semantics; verify the Plan records `delegate_agent_id` and `run_root`. An unavailable structured/MCP tool must result in `BLOCKED`, not a web-source substitute.
+## Is it automatic?
 
-## Project documents
+Once installed and enabled, HanaAgent may load the Skill automatically when a request is clearly complex. You do not need to mention its name every time.
 
-[Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [Compatibility](docs/COMPATIBILITY.md) · [Standards](docs/STANDARDS.md) · [Rule mapping](docs/RULE-MAPPING.md) · [Release](docs/RELEASE.md) · [Changelog](CHANGELOG.md)
+It is not a background service and does not run on a schedule. For important work or actions that may affect external systems, it shows a plan and waits for approval. Installing the Skill does not authorize automatic publishing, permission expansion, dependency installation, or account access.
 
-Run checks with Python standard library only: `python3 scripts/check_repo.py`. Build a local ZIP with `python3 scripts/build_release.py`.
+You can also request it explicitly:
 
-## License and brand
+> Use Agent Cowork Control for this task. Plan first, delegate bounded work, and verify the result before delivery.
 
-Content is licensed under [MIT](LICENSE), © 2026 ZXcharT. MIT permits use, copying, and modification of the software; it does not grant trademark rights, endorsement, or permission to use ZXcharT, OneChartLab, or related branding. Derived projects must not imply official affiliation.
+## Installation
+
+The simplest installation uses the official release asset:
+
+```text
+agent-cowork-control.skill
+```
+
+Drag the `.skill` file into a HanaAgent chat, then send:
+
+> Install this Skill.
+
+If a Release download is not available yet, install from source by following [Installation, updates, and removal](docs/INSTALLATION.md).
+
+## First use
+
+No special command syntax is required. Ask for the real task, for example:
+
+> Prepare this project for open source. Confirm the plan first, then delegate research, edits, and checks where useful.
+
+You can also ask for evidence-heavy research:
+
+> Research this company across multiple sources. Separate the key conclusions, supporting evidence, and remaining uncertainty.
+
+HanaAgent will show a plan first when the task is complex enough. Formal execution begins after you approve it.
+
+## Learn more
+
+Most users can stop here. The following documents cover installation details, internal behavior, compatibility, and maintenance:
+
+- [Installation, updates, and removal](docs/INSTALLATION.md)
+- [How it works](docs/HOW-IT-WORKS.md)
+- [Platform compatibility](docs/COMPATIBILITY.md)
+- [Security policy](SECURITY.md)
+- [Contributing](CONTRIBUTING.md)
+- [Project standards](docs/STANDARDS.md)
+- [Rule mapping](docs/RULE-MAPPING.md)
+- [Maintainer release process](docs/RELEASE.md)
+- [Changelog](CHANGELOG.md)
+
+## License
+
+Code and documentation are available under the [MIT License](LICENSE), © 2026 ZXcharT.

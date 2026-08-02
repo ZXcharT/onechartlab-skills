@@ -9,7 +9,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from build_release import include
 from verify_artifacts import safe_member
 
-REQUIRED = ["README.md","README.en.md","LICENSE","CONTRIBUTING.md","SECURITY.md","CHANGELOG.md",".gitignore","docs/STANDARDS.md","docs/COMPATIBILITY.md","docs/RELEASE.md","docs/RULE-MAPPING.md","scripts/check_repo.py","scripts/policy_harness.py","scripts/build_release.py","scripts/verify_artifacts.py","tests/test_policy.py","tests/test_repository.py","skills/agent-cowork-control/SKILL.md","skills/agent-cowork-control/references/behavior-contract.md"]
+REQUIRED = ["README.md","README.en.md","LICENSE","CONTRIBUTING.md","SECURITY.md","CHANGELOG.md",".gitignore","docs/STANDARDS.md","docs/COMPATIBILITY.md","docs/INSTALLATION.md","docs/HOW-IT-WORKS.md","docs/RELEASE.md","docs/RULE-MAPPING.md","scripts/check_repo.py","scripts/policy_harness.py","scripts/build_release.py","scripts/verify_artifacts.py","tests/test_policy.py","tests/test_repository.py","skills/agent-cowork-control/SKILL.md","skills/agent-cowork-control/references/behavior-contract.md"]
 EXCLUDED = {".git", "__pycache__", "runs", "dist", "evidence"}
 TEXT_EXT = {".md", ".py", ".json", ""}
 
@@ -26,6 +26,14 @@ class RepositoryTests(unittest.TestCase):
         p = ROOT/"skills/agent-cowork-control/SKILL.md"; t=p.read_text(encoding="utf-8")
         self.assertTrue(t.startswith("---\nname: agent-cowork-control\n"))
         self.assertLess(len(t.splitlines()), 500)
+    def test_user_readme_structure(self):
+        text=(ROOT/"README.md").read_text(encoding="utf-8")
+        required_sections=["## Agent Cowork Control 是什么","## 适合什么场景","## 哪些情况不会启动","## 它是自动的吗","## 安装","## 第一次使用","## 了解更多"]
+        positions=[text.index(section) for section in required_sections]
+        self.assertEqual(positions, sorted(positions))
+        opening=text[:text.index("## 了解更多")]
+        for jargon in ["六段 Plan","Canary","threadId","验证门禁"]:
+            self.assertNotIn(jargon, opening)
     def test_relative_links_and_single_reference_level(self):
         for p in text_files():
             t=p.read_text(encoding="utf-8")
