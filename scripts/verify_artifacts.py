@@ -17,6 +17,7 @@ PRIVACY_PATTERNS = [
     re.compile(r"sess_[A-Za-z0-9_]{8,}"),
     re.compile(r"(?im)^\s*(?:api[_-]?key|secret|token|password)\s*[:=]\s*['\"]?[^\s'\"]+"),
     re.compile(r"\b" + "hua" + "zhu" + r"\b", re.I),
+    re.compile(r"\b" + "mao" + "qiu" + r"\b", re.I),
     re.compile(r"\bkg\b", re.I),
 ]
 SCANNER_ALLOWLIST = {"onechartlab-skills/tests/test_repository.py", "onechartlab-skills/scripts/verify_artifacts.py"}

@@ -6,8 +6,8 @@
 |---|---|---|---|---|
 | 主代理负责、子代理无最终回复且不再委派 | `SKILL.md` 核心规则1 | `SKILL.md` 核心规则1 | 原义保留 | T02、T07 |
 | 六段 Plan、审查与明确批准双通道 | `SKILL.md` 规则2、Plan 双通道；`task-packets.md` | `SKILL.md` Plan 双通道；`task-packets.md` | 原个人审批者名称改为 approver | T01、T12 |
-| 固定 Agent、默认模型继承、不可静默换 Agent | `SKILL.md` 规则3 | `SKILL.md` 配置、规则3；`task-packets.md` 运行配置/派发信封 | 固定身份改为 `delegate_agent_id`；覆盖须批准 | T02 |
-| Plan 审查 read、独立新 thread、结束后关闭 | `SKILL.md` Plan 双通道1、7 | `SKILL.md` Plan 双通道1、7；`task-packets.md` Plan 审查包/账本 | 增加 `plan_reviewer_agent_id` 和 reviewer thread 记录 | T01、T02 |
+| Agent 选择、默认模型继承、不可静默替换 | `SKILL.md` 规则3 | `SKILL.md` 配置、规则3；`task-packets.md` 运行配置/派发信封 | 用户指定优先，否则按职责选择；无合适角色时回退当前角色子 Agent | T02 |
+| Plan 审查 read、独立新 thread、结束后关闭 | `SKILL.md` Plan 双通道1、7 | `SKILL.md` Plan 双通道1、7；`task-packets.md` Plan 审查包/账本 | 审查者使用同一身份路由规则并记录 reviewer thread | T01、T02 |
 | 最小 read/write 权限 | `SKILL.md` 规则4；各协议 | `SKILL.md` 规则5；各协议 | 原义保留 | T03 |
 | 一个责任域一个执行者、QUERY_BACKLOG | `SKILL.md` 规则5；`task-packets.md` | `SKILL.md` 规则6；`task-packets.md` | 原义保留 | T05 |
 | 结构化工具 Canary、同 thread 生产 | `SKILL.md` 规则6；`execution-protocol.md` | `SKILL.md` 规则7；`execution-protocol.md` | “金融 MCP”泛化为结构化/MCP 工具 | T04 |
@@ -36,7 +36,7 @@
 没有删除安全规则。仅删除或替换以下环境绑定：
 
 - 个人审批者名称 → `approver`。
-- 固定本地 Agent id → `delegate_agent_id` / `plan_reviewer_agent_id`。
+- 固定本地 Agent id → 用户指定、按职责选择或当前角色子 Agent。
 - 固定工作区假设 → 用户授权的 `run_root`。
 - 金融领域专用措辞 → 结构化/MCP 工具通用措辞。
 

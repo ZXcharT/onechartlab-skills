@@ -49,7 +49,7 @@ class RepositoryTests(unittest.TestCase):
         self.assertFalse(any(x.is_dir() for x in refs.iterdir()))
         self.assertFalse((ROOT/"skills/agent-cowork-control/README.md").exists())
     def test_privacy_patterns_with_context_allowlist(self):
-        forbidden = [r"/Users/[A-Za-z0-9_.-]+/", r"sess_[A-Za-z0-9_]{8,}", r"(?im)^\s*(?:api[_-]?key|secret|token|password)\s*[:=]\s*['\"]?[^\s'\"]+", r"\b"+"hua"+"zhu"+r"\b", r"\b"+"k"+"g"+r"\b"]
+        forbidden = [r"/Users/[A-Za-z0-9_.-]+/", r"sess_[A-Za-z0-9_]{8,}", r"(?im)^\s*(?:api[_-]?key|secret|token|password)\s*[:=]\s*['\"]?[^\s'\"]+", r"\b"+"hua"+"zhu"+r"\b", r"\b"+"mao"+"qiu"+r"\b", r"\b"+"k"+"g"+r"\b"]
         hits=[]
         for p in text_files():
             t=p.read_text(encoding="utf-8")

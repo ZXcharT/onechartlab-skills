@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.1 — Unreleased
+
+- Added task-aware Agent selection with current-role child fallback when no suitable specialist is available.
+- Preserved user-selected Agent priority, thread identity, least-privilege access and default-model inheritance.
+
 ## 0.1.0 — 2026-08-02
 
 - Published the first OneChartLab Skills repository.

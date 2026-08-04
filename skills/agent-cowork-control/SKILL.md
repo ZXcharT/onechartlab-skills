@@ -1,10 +1,10 @@
 ---
 name: agent-cowork-control
 description: "HanaAgent 复杂任务的主子 Agent 协作总控。仅当任务需要六段决策 Plan，且涉及子代理委派、跨来源证据整合、跨模块多文件写入或独立验证时启用。主代理统一规划、委派、综合和最终验收。简单问答、单代理可完成的研究、纯读取、闲聊和无委派收益的小修不启用。"
-compatibility: "Target runtime: HanaAgent. Requires subagent, subagent_reply, subagent_close, current_status, workflow identity, thread lifecycle and read/write access semantics. Claude Code and Codex are static format references only; runtime behavior is unverified."
+compatibility: "Target runtime: HanaAgent. Requires subagent, subagent_reply, subagent_close, current_status, workflow identity, current-role child creation, thread lifecycle and read/write access semantics. Claude Code and Codex are static format references only; runtime behavior is unverified."
 license: MIT
 metadata:
-  version: "0.1.0"
+  version: "0.1.1"
   run_root_default: "<user-authorized-workspace>/runs/"
 ---
 
@@ -18,11 +18,11 @@ metadata:
 
 每个获批 Plan 必须记录：
 
-- `delegate_agent_id`：执行、研究和验证默认使用的显式 Agent 身份。
-- `plan_reviewer_agent_id`：Plan 审查身份；未另行指定时可以与 `delegate_agent_id` 相同，但必须使用独立新 thread、`read` 权限和 Plan 审查角色。
+- `delegate_agent`：用户指定、按子任务职责选择的合适专业 Agent，或 `current-agent`。
+- `plan_reviewer_agent`：按同一规则选择的 Plan 审查角色；必须使用独立新 thread 和 `read` 权限。
 - `run_root`：用户授权工作区中的运行根目录，默认 `<user-authorized-workspace>/runs/`。
 
-同一 Agent 身份可以承担不同阶段，但不得跨角色复用 thread。用户未明确身份且宿主无法安全解析时，停止并请求决定，不得猜测或静默替换。
+用户明确指定 Agent 时优先使用；否则根据子任务职责选择合适的专业 Agent。没有合适角色时，继承当前 Agent 角色创建临时子 Agent。用户指定的 Agent 不可用时停止并报告，不静默替换。
 
 本文件是安全最小规则和规范入口。执行前按顺序读取：
 
@@ -36,8 +36,8 @@ metadata:
 
 1. **主代理负责**：主代理规划、综合并最终验收；子代理不拥有最终回复，不创建下级代理。
 2. **Plan 门禁**：高风险、多模块、难回退或方向待选的任务，先展示六段 Plan，完成双通道审查并获 approver 明确批准后执行。
-3. **身份显式**：新建委派显式传入 Plan 中记录的 Agent 身份；默认省略模型覆盖，继承该 Agent 的配置默认模型。只有用户明确批准时才覆盖。Agent 不可用时硬停止，禁止静默换 Agent。
-4. **thread 独立**：Plan 审查、研究、执行和验证是不同角色；不同角色使用独立新 thread。仅同一责任域的续派使用原 `threadId`。
+3. **身份路由**：用户明确指定 Agent 时优先使用；否则根据子任务职责选择合适的专业 Agent。没有合适角色时，继承当前 Agent 角色创建临时子 Agent。新建专业 Agent 委派时传入所选身份；回退当前角色时省略 `agent` / `agentType`。默认继承所选角色的配置模型；只有用户明确批准时才覆盖。Agent 不可用时停止并报告。
+4. **thread 独立**：Plan 审查、研究、执行和验证是不同角色；不同角色使用独立新 thread。仅同一责任域的续派使用原 `threadId`，同一 thread 不更换 Agent。
 5. **最小权限**：研究、验证、Plan 审查默认 `read`；写权限只给明确写入责任人。身份或模型选择不得放宽权限、安全和验收边界。
 6. **一个责任域一个执行者**：委派后主代理编排优先，普通补充查询进入 `QUERY_BACKLOG`，不与子代理重复工作。
 7. **Canary 先行**：结构化/MCP 工具先在同一子线程做精确 Canary，成功后才可生产。工具、权限、认证或路线不符时硬停止，不换源、不安装依赖、不扩大工具范围。
@@ -51,7 +51,7 @@ metadata:
 
 ## Plan 双通道审查
 
-1. 主代理形成 `PLAN_DRAFT`，同轮用 `plan_reviewer_agent_id` 派出 `read`、Plan 审查角色、独立新 thread 的审查者，并向 approver 展示六段 Plan。
+1. 主代理形成 `PLAN_DRAFT`，同轮按身份路由规则派出 `read`、Plan 审查角色、独立新 thread 的审查者，并向 approver 展示六段 Plan。
 2. 进入 `PLAN_REVIEWING` 后仅审查者可运行，不派研究、数据或执行任务。
 3. approver 反馈与审查结果必须两方齐全；无回复不等于批准，不设超时默许。
 4. “好的、开始执行、按这个计划做、没问题”等明确表述可视为批准。
@@ -91,4 +91,4 @@ metadata:
 
 ## 行为验收入口
 
-整理或审计本 Skill 时，行为保持、规则优先级和安全护栏高于压缩与去重。必须覆盖 [T01–T14 行为契约](references/behavior-contract.md)：Plan 双通道、身份/thread、最小权限、Canary、QUERY_BACKLOG、运行目录、FINAL/验证门禁、状态汇报不停工、后台失败穿透、静默恢复、NEEDS_REVISION、超范围重审批、沟通协议正常加载、沟通协议加载失败硬阻断。规则映射中测试 ID 为空即阻断；删除项必须指向唯一规范来源并通过等价性审查。
+整理或审计本 Skill 时，行为保持、规则优先级和安全护栏高于压缩与去重。必须覆盖 [T01–T14 行为契约](references/behavior-contract.md)：Plan 双通道、身份路由/thread、最小权限、Canary、QUERY_BACKLOG、运行目录、FINAL/验证门禁、状态汇报不停工、后台失败穿透、静默恢复、NEEDS_REVISION、超范围重审批、沟通协议正常加载、沟通协议加载失败硬阻断。规则映射中测试 ID 为空即阻断；删除项必须指向唯一规范来源并通过等价性审查。

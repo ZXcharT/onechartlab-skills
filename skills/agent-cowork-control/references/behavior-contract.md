@@ -4,8 +4,8 @@
 
 | ID | 行为 | 必须通过 | 必须阻断或改道 |
 |---|---|---|---|
-| T01 | Plan 双通道 | approver 批准，且显式 reviewer 身份通过独立 read-only 新 thread 审查后执行 | 任一通道、身份、权限或独立 thread 缺失时等待 |
-| T02 | 身份与 thread | 显式 delegate 身份，仅同角色同责任域续 thread，模型覆盖已批准 | 无身份、跨角色复用 thread、静默替换或未批准模型覆盖 |
+| T01 | Plan 双通道 | approver 批准，且按身份路由选出的 reviewer 通过独立 read-only 新 thread 审查后执行 | 任一通道、身份、权限或独立 thread 缺失时等待 |
+| T02 | 身份路由与 thread | 用户指定优先；否则选择合适专业 Agent；没有合适角色时使用当前角色创建新子 thread | 用户指定不可用、跨角色复用 thread、静默替换或未批准模型覆盖 |
 | T03 | 最小权限 | 研究/验证/审查 read，唯一写者 write | read 角色获得 write |
 | T04 | Canary | Canary 成功且同 thread 后生产 | 失败、未 Canary 或换 thread |
 | T05 | QUERY_BACKLOG | 已有责任域的补充查询进入 backlog | 重复派人拉同一责任域 |

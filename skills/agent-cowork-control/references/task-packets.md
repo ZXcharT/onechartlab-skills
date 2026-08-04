@@ -29,12 +29,12 @@ Plan 一屏内完成，技术细节留在内部任务包。批准后持续执行
 ## Plan 运行配置
 
 ```markdown
-- delegate_agent_id：执行、研究和验证使用的显式 Agent 身份
-- plan_reviewer_agent_id：Plan 审查身份；可与 delegate_agent_id 相同，但必须使用独立新 thread、read 权限和 Plan 审查角色
+- delegate_agent：用户指定 / 按职责选择 / current-agent
+- plan_reviewer_agent：用户指定 / 按职责选择 / current-agent
 - run_root：用户授权工作区中的运行根目录
 ```
 
-同一 Agent 身份承担不同角色时必须新建独立 thread；不得跨角色复用 thread。身份不可用或未解析时停止并请求决定，不得静默替换。
+用户指定优先；否则按子任务职责选择合适的专业 Agent。没有合适角色时使用 `current-agent`，继承当前 Agent 角色创建临时子 Agent。用户指定的 Agent 不可用时停止并报告。不同角色使用独立新 thread；同一 thread 不更换 Agent。
 
 ## 内部责任映射
 
@@ -78,8 +78,8 @@ Plan 一屏内完成，技术细节留在内部任务包。批准后持续执行
 
 ```markdown
 ### 派发信封
-- agent：<delegate_agent_id 或 plan_reviewer_agent_id>
-- model：继承该 Agent 当前默认模型（调用时省略 model）；用户批准覆盖时记录
+- agent：<所选 Agent；current-agent 回退时省略 agent / agentType>
+- model：继承所选角色当前默认模型（调用时省略 model）；用户批准覆盖时记录
 - access：read / write
 - 功能角色：研究 / 数据执行 / 一般执行 / 验证 / Plan 审查
 - thread：新建 / 续 threadId=<...>
@@ -187,7 +187,7 @@ read 任务只精简返回；需长篇文件时报告，由主代理另派 write
 
 ## Plan 审查任务包
 
-仅六段 Plan 任务使用；`read`、`plan_reviewer_agent_id`、Plan 审查角色、独立新 thread。Plan 审查消耗该 Plan 阶段唯一审核资格，修订后不再次审查；额外审查仅在用户明确授权时进行。
+仅六段 Plan 任务使用；按身份路由规则选择审查者，使用 `read`、Plan 审查角色和独立新 thread。Plan 审查消耗该 Plan 阶段唯一审核资格，修订后不再次审查；额外审查仅在用户明确授权时进行。
 
 ```markdown
 你是 Plan 审查者。只审 Plan，不执行、不写文件。
@@ -195,7 +195,7 @@ read 任务只精简返回；需长篇文件时报告，由主代理另派 write
 ### 原始请求
 ### PLAN_DRAFT
 ### 审查身份与 thread
-- plan_reviewer_agent_id：<显式身份>
+- plan_reviewer_agent：<所选 Agent / current-agent>
 - reviewer_thread：独立新 thread
 - access：read
 ### 审查维度
@@ -215,7 +215,7 @@ PLAN_OK / PLAN_NEEDS_REVISION；问题严重程度、定位、建议；非实质
 ```markdown
 - approver 反馈：未到 / 已批准 / 有修改意见
 - 审查：未到 / PLAN_OK / PLAN_NEEDS_REVISION
-- reviewer identity：<plan_reviewer_agent_id>
+- reviewer identity：<所选 Agent / current-agent>
 - reviewer thread：<独立 threadId>
 - 两方齐全：否 / 是
 - 冲突：无 / 有

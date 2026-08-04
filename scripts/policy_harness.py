@@ -20,15 +20,19 @@ def evaluate(trace):
         ])
         return "EXECUTE" if ready else "WAIT_APPROVAL"
     if rule == "T02":
+        source = s.get("selection_source")
+        if source == "current":
+            identity_ok = all([
+                s.get("no_suitable_agent") is True,
+                s.get("current_agent_child") is True,
+            ])
+        elif source in {"user", "task"}:
+            identity_ok = bool(s.get("delegate_agent_id")) and s.get("agent_available") is True
+        else:
+            identity_ok = False
+        thread_ok = s.get("same_role") is True and (s.get("new_thread") is True or s.get("same_thread") is True)
         model_ok = not s.get("model_override", False) or s.get("model_override_approved") is True
-        ready = all([
-            bool(s.get("delegate_agent_id")),
-            s.get("agent_available") is True,
-            s.get("same_thread") is True,
-            s.get("same_role") is True,
-            model_ok,
-        ])
-        return "CONTINUE" if ready else "BLOCKED"
+        return "CONTINUE" if identity_ok and thread_ok and model_ok else "BLOCKED"
     if rule == "T03":
         role, access = s.get("role"), s.get("access")
         allowed = (role in READ_ROLES and access == "read") or (role == "writer" and access == "write" and s.get("named_writer") is True)
