@@ -1,6 +1,12 @@
-# OneChartLab Skills
-
-[简体中文](README.md)
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/brand/onechart-symbol-white.svg">
+    <img src="assets/brand/onechart-symbol-black.svg" width="88" height="88" alt="OneChart">
+  </picture>
+</p>
+<h1 align="center">OneChartLab Skills</h1>
+<p align="center">An open-source OneChart project for auditable AI Agent collaboration</p>
+<p align="center"><a href="README.md">简体中文</a></p>
 
 ## What is Agent Cowork Control?
 
@@ -91,4 +97,4 @@ Most users can stop here. The following documents cover installation details, in
 
 ## License
 
-Code and documentation are available under the [MIT License](LICENSE), © 2026 ZXcharT.
+Code and documentation are available under the [MIT License](LICENSE), © 2026 ZXcharT. The OneChart, OneChartLab, and ZXcharT names and logos are excluded from the MIT grant; see [TRADEMARKS.md](TRADEMARKS.md).

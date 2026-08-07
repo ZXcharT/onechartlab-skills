@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">OneChart logo — black</title>
+  <desc id="desc">A complete circle crossed by a centrally symmetric 50-degree trend-and-pullback band with sharp mitered turns and horizontally cut terminals.</desc>
+  <defs>
+    <clipPath id="horizontal-terminal-cut">
+      <rect x="0" y="101" width="512" height="310"/>
+    </clipPath>
+  </defs>
+  <g fill="none" stroke="#000000" stroke-width="20">
+    <circle cx="256" cy="256" r="160"/>
+    <path d="M 105.266900 445.243850 L 234 232 L 278 280 L 406.733100 66.756150"
+          stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="4"
+          clip-path="url(#horizontal-terminal-cut)"/>
+  </g>
+</svg>

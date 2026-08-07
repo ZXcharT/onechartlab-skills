@@ -1,6 +1,12 @@
-# OneChartLab Skills
-
-[English](README.en.md)
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/brand/onechart-symbol-white.svg">
+    <img src="assets/brand/onechart-symbol-black.svg" width="88" height="88" alt="OneChart">
+  </picture>
+</p>
+<h1 align="center">OneChartLab Skills</h1>
+<p align="center">OneChart 开源项目 · 为 AI Agent 提供可审查的协作方法</p>
+<p align="center"><a href="README.en.md">English</a></p>
 
 ## Agent Cowork Control 是什么
 
@@ -91,4 +97,4 @@ HanaAgent 判断任务足够复杂时，会先给出计划。你确认后，它�
 
 ## 许可
 
-代码和文档采用 [MIT License](LICENSE)，版权为 © 2026 ZXcharT。
+代码和文档采用 [MIT License](LICENSE)，版权为 © 2026 ZXcharT。OneChart、OneChartLab、ZXcharT 名称及其 Logo 不包含在 MIT 授权中，详见 [TRADEMARKS.md](TRADEMARKS.md)。
