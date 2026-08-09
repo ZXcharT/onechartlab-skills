@@ -1,16 +1,16 @@
 # OneChartLab Skills 项目工作规则
 
-本文件是 OneChartLab Skills 公开仓库的项目级规则入口，只对本仓库生效。
+本文件是 OneChartLab Skills 公开源码仓库的项目级规则入口，只对本仓库生效。
 
 ## 1. 项目定位
 
-本仓库维护可公开安装、审查和发布的 Agent Skills。当前主要内容是 `agent-cowork-control`，其规则必须同时满足：人能读懂、Agent 能执行、测试能验证、发布包能复现。
+本仓库维护可公开安装、审查和发布的 Agent Skills。当前主要内容是 `agent-cowork-control`；规则必须可读、可执行、可验证，发布包必须可复现。
 
-仓库中的政策约束不能冒充 HanaAgent 或其他宿主平台的硬权限机制。运行能力不足时应明确 `BLOCKED`，不得静默换来源、降级安全门禁或虚构验证结果。
+政策约束不能冒充 HanaAgent 或其他宿主的硬权限。运行能力不足时明确 `BLOCKED`，不得静默换来源、降低安全门禁或虚构结果。
 
-## 2. 开工门禁
+## 2. 开工、阶段与停止
 
-任何写入前核对：
+写入前核对：
 
 ```text
 仓库绝对路径：
@@ -19,103 +19,53 @@ Git 根目录：
 当前 commit：
 working tree：clean / dirty
 本次基线：
-任务类型：Skill 行为 / 测试协议 / 文档 / 发布
+工作阶段：探索 / 正式实现 / 发布
 ```
 
-存在无法解释的改动、目标不是唯一正式 Git 根、规则与测试相互冲突或同一工作区有其他写入者时，停止修改并报告。
+- 探索态只验证方向或局部方案，不默认更新全部测试、CHANGELOG、commit 或发布产物。
+- 正式实现态形成稳定行为基线，更新受影响的规则、fixture、断言和文档，并执行仓库检查。
+- 发布态才处理版本、完整 CHANGELOG、全部协议验证、发布包和干净解压复检。
 
-## 3. 必读文件
+安全风险可以暂停或收窄执行，但不自动升级阶段。若 Git 根或基线不可信、工作区有无法解释的改动、规则与测试实质冲突或存在其他写入者，停止修改并报告。
 
-首次进入仓库先读取：
+## 3. 按任务读取事实源
 
-- `README.md`
-- `CONTRIBUTING.md`
-- `SECURITY.md`
-- `docs/STANDARDS.md`
+新会话首次写入前读取 `README.md`，并按任务查阅 `CONTRIBUTING.md` 与 `docs/STANDARDS.md` 的相关部分；相关文件未变化时不重复全文读取。
 
-涉及 Skill 行为时再读取：
+- 修改 Skill 行为：读取对应 `SKILL.md`、受影响的 `references/`、测试和 fixture。
+- 涉及安全或隐私：读取 `SECURITY.md`。
+- 涉及版本、打包或发布：读取 `docs/RELEASE.md`、`CHANGELOG.md`、构建与产物验证脚本。
 
-- `skills/agent-cowork-control/SKILL.md`
-- 受影响的 `skills/agent-cowork-control/references/`
-- 对应测试与 fixture
+项目文件和当前测试结果是事实源，优先于历史聊天或助手既有判断。
 
-涉及打包、版本或公开发布时再读取：
-
-- `docs/RELEASE.md`
-- `CHANGELOG.md`
-- `scripts/build_release.py`
-- `scripts/verify_artifacts.py`
-
-项目文件和当前测试结果优先于历史聊天或助手记忆。
-
-## 4. 结构与修改边界
+## 4. 结构、安全与修改边界
 
 - Skill 目录名必须与 `SKILL.md` frontmatter 的 `name` 一致。
 - Skill 内不新增 README；完整角色语义和协议放在单层 `references/`。
 - Skill 内链接使用 Skill 根相对路径，不写本机绝对路径。
-- 安全短摘要保留在 `SKILL.md`；详细协议、fixture、断言和变更记录同步维护。
+- 安全短摘要保留在 `SKILL.md`，详细协议及其受影响的 fixture、断言同步维护。
 - 新增运行时声明必须标示“实际验证”“静态格式参考”或“未验证”。
 - 不把政策要求写成宿主必然具备的工具、权限或自动执行能力。
+- 不提交 token、secret、Authorization 值、密码、密钥、证书、私有路径、会话标识、账户信息、内部服务地址、日志、缓存、运行轨迹、真实用户数据或未脱敏证据。
 - 不提交第三方内容，除非许可、归属和再分发边界已经核对。
 - 不新增依赖、平台绑定或发布渠道，除非任务明确需要且得到批准。
 - 一次只解决一个主要问题，不顺手重写提示词体系、调整无关测试或扩大兼容范围。
 
-## 5. 安全与隐私
-
-禁止提交或写入测试材料：
-
-- token、secret、Authorization 值、密码、密钥和证书；
-- 私有路径、会话标识、账户信息和内部服务地址；
-- 日志、缓存、运行轨迹、真实用户数据和未脱敏证据；
-- 未经许可的第三方文档、模板或代码。
-
 发现疑似泄露时停止分发，保留最少必要证据，按 `SECURITY.md` 处理，并重新扫描工作树与候选归档。
 
-## 6. 验证要求
+## 5. 按阶段验证
 
-普通修改至少执行：
+- 探索态：执行足以判断当前方案的受影响验证；无法验证的事项明确说明。
+- 正式实现态：更新受影响的 fixture、断言和文档，运行 `python3 scripts/check_repo.py` 与 `git diff --check`；新增行为按影响覆盖成功、阻塞和关键失败路径。
+- 发布态：更新版本和 CHANGELOG，运行完整 T01–T14，并完整执行 `docs/RELEASE.md`，包括 `build_release.py`、`verify_artifacts.py`、干净解压及适用的安装验证。
 
-```bash
-python3 scripts/check_repo.py
-git diff --check
-```
+缺少安装环境或平台能力时标记 `NOT_RUN`。本地检查或构建不等于已经兼容、公开发布或所有平台可用。
 
-修改 Skill 安全规则、协议或行为时：
-
-- 更新对应的 T01–T14 fixture、断言和 `CHANGELOG.md`；
-- 验证可读规则、references 与可执行断言没有冲突；
-- 对新增行为同时覆盖成功、阻塞和关键失败路径。
-
-涉及发布候选时再执行：
-
-```bash
-python3 scripts/build_release.py
-```
-
-并按照 `docs/RELEASE.md` 在干净解压目录检查仓库 ZIP、Skill 包和 `SHA256SUMS`。缺少独立安装环境或平台能力时标记 `NOT_RUN`，不得声称兼容或可发布。
-
-## 7. Git 与外部边界
+## 6. Git、外部边界与报告
 
 - 同一工作区同一时间只允许一个写入责任人。
-- 每项变更形成单一职责 commit；版本、发布说明和产物必须能追溯到唯一 commit。
+- 探索态不默认 commit；正式实现或发布态形成单一职责 commit，并使版本、说明和产物可追溯。
 - 不从 `dist/`、ZIP 解压目录、旧副本或临时 run 继续开发。
 - Git push、GitHub Release、商店发布、远程仓库设置和外部安装验证必须获得仓库所有者单独批准。
-- 本地构建成功只代表候选产物生成，不等于已公开发布或所有平台兼容。
 
-## 8. 完成报告
-
-完成时至少说明：
-
-```text
-状态：COMPLETED / NEEDS_REVISION / BLOCKED
-本次解决：
-本次未做：
-变更文件：
-实际命令与退出结果：
-测试与安装验证：
-版本、commit 与产物：
-外部影响：
-回滚入口：
-已知风险与未验证项：
-需要仓库所有者做什么：
-```
+探索态收口只报告修改、实际验证和未验证项。正式实现或发布态再报告状态、范围、证据、版本或产物、外部影响、回滚入口、风险和需要仓库所有者决定的事项。
