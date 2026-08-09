@@ -4,6 +4,7 @@ __pycache__/
 .venv/
 venv/
 *.log
+.DS_Store
 *.zip
 SHA256SUMS
 runs/
