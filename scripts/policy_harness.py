@@ -14,7 +14,7 @@ def evaluate(trace):
         mode = s.get("mode")
         if mode == "direct":
             return "EXECUTE" if s.get("direct_eligible") is True else "PLAN_REQUIRED"
-        if mode == "light":
+        if mode in {"planned", "light"}:
             ready = all([
                 s.get("plan_format") == "steps_verify",
                 s.get("approver") is True,
@@ -77,14 +77,24 @@ def evaluate(trace):
     if rule == "T05":
         if s.get("duplicate_executor") is True:
             return "BLOCKED"
-        return "BACKLOG" if s.get("domain_owned") else "QUERY"
+        mode = s.get("mode")
+        if mode == "light":
+            return "CONTINUE_THREAD" if s.get("domain_owned") else "QUERY"
+        if mode == "controlled":
+            return "BACKLOG" if s.get("domain_owned") else "QUERY"
+        return "BLOCKED"
     if rule == "T06":
+        mode = s.get("mode")
+        if mode not in {"direct", "planned", "light", "controlled"}:
+            return "BLOCKED"
         if s.get("read_only") is True or s.get("direct_response") is True:
             ready = s.get("ownership_conflict") is False
         else:
             requires_isolation = any(s.get(name) is True for name in (
                 "multiple_write_domains", "batch_or_formal_data", "reproducible_evidence", "intermediate_isolation"
             ))
+            if requires_isolation and mode != "controlled":
+                return "ESCALATE_CONTROLLED"
             if requires_isolation:
                 ready = all([
                     s.get("authorized_run_root") is True,
@@ -103,7 +113,9 @@ def evaluate(trace):
         return "ALLOW" if ready else "BLOCKED"
     if rule == "T07":
         mode = s.get("mode")
-        if mode in {"direct", "light"}:
+        if mode in {"direct", "planned", "light"}:
+            if s.get("final_required") is True:
+                return "ESCALATE_CONTROLLED"
             ready = all([
                 s.get("success_criteria_met") is True,
                 s.get("main_verified") is True,
@@ -153,18 +165,25 @@ def evaluate(trace):
         ])
         return "RECOVER" if ready else "ESCALATE"
     if rule == "T11":
+        if s.get("mode") != "controlled":
+            return "NOT_REQUIRED"
         ready = all([
             s.get("audit_done") is True,
             s.get("state") == "NEEDS_REVISION",
-            s.get("second_audit_requested") is False,
             s.get("main_agent_owns_fix") is True,
         ])
-        return "MAIN_FIX" if ready else "BLOCKED"
+        if not ready:
+            return "BLOCKED"
+        if s.get("second_audit_requested") is True:
+            return "EXTRA_AUDIT" if s.get("extra_audit_approved") is True else "BLOCKED"
+        return "MAIN_FIX"
     if rule == "T12":
         fields = ("scope", "direction", "risk", "deliverable", "permission", "external_effect")
         material = any(s.get(name) is True for name in fields)
         return "REAPPROVAL" if material else "CONTINUE"
     if rule == "T13":
+        if s.get("mode") != "controlled":
+            return "NOT_REQUIRED"
         ready = all([
             s.get("communication_loaded") is True,
             s.get("path") == "references/communication-protocol.md",
@@ -172,6 +191,8 @@ def evaluate(trace):
         ])
         return "LOAD_OK" if ready else "BLOCKED"
     if rule == "T14":
+        if s.get("mode") != "controlled":
+            return "NOT_REQUIRED"
         if s.get("communication_loaded") is True:
             return "ALLOW"
         if s.get("event_pending") is not True:
