@@ -14,8 +14,8 @@
 | 一个责任域一个执行者、补充查询不重复派人 | `SKILL.md` 规则5；`task-packets.md` | 单一责任保留；正式 `QUERY_BACKLOG` 仅用于受控协作 | `SKILL.md` 规则6；`task-packets.md` | T05 |
 | 结构化工具先 Canary、同 thread 生产 | `SKILL.md` 规则6；`execution-protocol.md` | 条件化：安全单次只读调用可直接执行；轻量协作遇到风险调用时升级；受控协作的批量、写入、不确定、高成本或高影响调用先 Canary | `SKILL.md` 规则7；`execution-protocol.md` | T04 |
 | 证据外部化、确定性断言、可重跑 | `SKILL.md` 规则7；执行、研究与验证协议 | 保留，按任务规模使用 | `SKILL.md` 规则8；完整角色协议 | T06、T07 |
-| `runs/...` 隔离、单目录单写者 | `SKILL.md` 规则8；`task-packets.md` | 条件化：普通单一写入者使用授权目标目录；多个写入责任域、批量或正式数据、可重跑证据及中间产物隔离才使用授权 `run_root` | `SKILL.md` 规则9；`task-packets.md` | T06 |
-| FINAL 字段、stage 不等于验收 | `SKILL.md` 规则9；`task-packets.md` | 条件化：仅持久交接、跨会话恢复、多产物汇总或用户明确要求正式证据包时创建 `FINAL.md` | `SKILL.md` 规则10；`task-packets.md` FINAL 模板 | T07 |
+| `runs/...` 隔离、单目录单写者 | `SKILL.md` 规则8；`task-packets.md` | 条件化：普通单一写入者使用授权目标目录；非受控模式命中隔离条件时先升级，受控协作才为多个写入责任域、批量或正式数据、可重跑证据及中间产物隔离使用授权 `run_root` | `SKILL.md` 规则9；`task-packets.md` | T06 |
+| FINAL 字段、stage 不等于验收 | `SKILL.md` 规则9；`task-packets.md` | 条件化：非受控模式命中交接条件时先升级；受控协作仅在持久交接、跨会话恢复、多产物汇总或用户明确要求正式证据包时创建 `FINAL.md` | `SKILL.md` 规则10；`task-packets.md` FINAL 模板 | T07 |
 | 状态汇报与批准独立、异常穿透 | `SKILL.md` 规则10；`communication-protocol.md` | 安全语义保留；完整沟通状态机仅用于受控协作，轻量协作使用平台常规反馈 | `SKILL.md` 规则11；`communication-protocol.md` | T08、T09 |
 | 协议层级、冲突先停止 | `SKILL.md` 规则11 | 保留；完整协议适用于受控协作 | `SKILL.md` 规则12 | T13、T14 |
 | 执行者完整硬停止条件 | `execution-protocol.md` write 硬停止 | 保留；写入位置按授权目标目录或条件触发的 `run_root` 判断 | `execution-protocol.md` write 硬停止 | T03、T04、T06、T10、T12 |
