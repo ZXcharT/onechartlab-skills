@@ -3,6 +3,7 @@
 ## 0.1.1 — 2026-08-11
 
 - Added direct, light and controlled execution paths; ordinary multi-step single-Agent work uses a brief approved plan without entering controlled collaboration.
+- Improved automatic matching for natural requests that explicitly ask multiple Agents or assistants to divide, parallelize or independently check work.
 - Escalated light collaboration when risk, write isolation, formal handoff or other controlled conditions appear.
 - Made Canary probes, run directories and `FINAL.md` conditional on execution risk, write structure and handoff needs.
 - Limited independent review to one Plan review and one result review in controlled collaboration; additional review requires explicit user approval.
