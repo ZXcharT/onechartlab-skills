@@ -10,9 +10,9 @@
 
 ## Agent Cowork Control 是什么
 
-> 让 AI 遇到大任务时，先把事情想清楚、拆开分工，再检查结果，而不是一个助手从头莽到尾。
+> 当一项工作适合由多个 Agent 分工完成时，这个 Skill 帮助主 Agent 先明确计划，再分配任务并检查结果。
 
-安装后，当你让 HanaAgent 处理一项比较复杂的工作时，它可以：
+安装到支持子 Agent 的工具后，它可以帮助主 Agent：
 
 - 先告诉你准备怎么做，等你确认后再开始；
 - 把查资料、改文件、运行检查等工作分给不同助手；
@@ -44,17 +44,17 @@
 
 ## 它是自动的吗
 
-安装后，HanaAgent 遇到复杂任务时会尝试使用它，你不需要每次都说出它的名字。
+在支持自动加载 Skill 的工具中，Agent 判断分工确实有帮助时可以使用它，你不需要每次都说出它的名字。
 
 如果它没有自动使用，直接说：
 
-> 这个任务比较复杂，请使用 Agent Cowork Control。
+> 这个任务适合分工，请使用 Agent Cowork Control。
 
-它不是后台服务，也不会自己定时运行。对于重要、复杂或可能影响外部系统的工作，它会先把计划展示给你，得到确认后才继续。安装这个 Skill 不代表允许它自动发布文件、扩大权限、安装依赖或访问其他账户。
+它不是后台服务，也不会自己定时运行。对于重要或可能影响外部系统的工作，主 Agent 会先把计划展示给你，得到确认后才继续。安装这个 Skill 不代表允许它自动发布文件、扩大权限、安装依赖或访问其他账户。
 
 ## 安装
 
-最简单的方式，是把这个仓库网址发给 HanaAgent：
+以 HanaAgent 为例，最简单的方式是把这个仓库网址发给它：
 
 ```text
 https://github.com/ZXcharT/onechartlab-skills
@@ -66,7 +66,7 @@ https://github.com/ZXcharT/onechartlab-skills
 
 HanaAgent 会找到仓库中的 Skill 并完成安装。
 
-如果当前 Agent 不支持从 GitHub 仓库安装，也可以从 Release 页面下载 `agent-cowork-control.skill`，拖进聊天窗口后说“请安装这个 Skill”。其他方式见 [安装、更新与卸载](docs/INSTALLATION.md)。
+如果当前 Agent 不支持从 GitHub 仓库安装，也可以从 Release 页面下载 `agent-cowork-control.skill`，拖进聊天窗口后要求当前 Agent 安装。其他方式见 [安装、更新与卸载](docs/INSTALLATION.md)。
 
 ## 第一次使用
 
@@ -78,7 +78,7 @@ HanaAgent 会找到仓库中的 Skill 并完成安装。
 
 > 帮我深入研究这家公司。需要核对不同来源，最后把关键结论、证据和不确定的地方分开写清楚。
 
-HanaAgent 判断任务足够复杂时，会先给出计划。你确认后，它才会进入正式执行。
+主 Agent 判断分工有帮助时，会先给出计划。你确认后，它才会开始执行。
 
 ## 了解更多
 

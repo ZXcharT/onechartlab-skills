@@ -10,9 +10,9 @@
 
 ## What is Agent Cowork Control?
 
-> It helps an AI handle large tasks by planning first, delegating clear parts of the work, and checking the result before delivery.
+> When work benefits from several Agents sharing responsibility, this Skill helps the lead Agent define the plan, delegate tasks, and check the result.
 
-After installation, it can help HanaAgent:
+When installed in a tool that supports subagents, it can help the lead Agent:
 
 - show you a plan and wait for confirmation before starting important work;
 - assign research, file editing, and checks to different helper agents;
@@ -44,17 +44,17 @@ It is normally unnecessary for:
 
 ## Is it automatic?
 
-After installation, HanaAgent will try to use it for complex tasks. You do not need to mention its name every time.
+In tools that can load Skills automatically, an Agent may use it when delegation would clearly help. You do not need to mention its name every time.
 
 If it does not start automatically, simply say:
 
-> This task is complex. Please use Agent Cowork Control.
+> This task would benefit from delegation. Please use Agent Cowork Control.
 
-It is not a background service and does not run on a schedule. For important work or actions that may affect external systems, it shows a plan and waits for approval. Installing the Skill does not authorize automatic publishing, permission expansion, dependency installation, or account access.
+It is not a background service and does not run on a schedule. For important work or actions that may affect external systems, the lead Agent shows a plan and waits for approval. Installing the Skill does not authorize automatic publishing, permission expansion, dependency installation, or account access.
 
 ## Installation
 
-The simplest method is to send this repository URL to HanaAgent:
+For HanaAgent, the simplest method is to send it this repository URL:
 
 ```text
 https://github.com/ZXcharT/onechartlab-skills
@@ -66,7 +66,7 @@ Then say:
 
 HanaAgent will locate the Skill in the repository and install it.
 
-If the current Agent cannot install from a GitHub repository, download `agent-cowork-control.skill` from the Release page, drag it into the chat, and ask HanaAgent to install it. See [Installation, updates, and removal](docs/INSTALLATION.md) for other methods.
+If the current Agent cannot install from a GitHub repository, download `agent-cowork-control.skill` from the Release page, drag it into the chat, and ask the current Agent to install it. See [Installation, updates, and removal](docs/INSTALLATION.md) for other methods.
 
 ## First use
 
@@ -78,7 +78,7 @@ You can also ask for evidence-heavy research:
 
 > Research this company across multiple sources. Separate the key conclusions, supporting evidence, and remaining uncertainty.
 
-HanaAgent will show a plan first when the task is complex enough. Formal execution begins after you approve it.
+When the lead Agent determines that delegation would help, it will show a plan first. Work begins after you approve it.
 
 ## Learn more
 
