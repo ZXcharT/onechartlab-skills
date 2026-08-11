@@ -12,8 +12,8 @@ OUT = ROOT / "dist"
 NAME = "onechartlab-skills"
 VERSION = "0.1.1"
 ALLOWED_ROOT_FILES = {
-    ".gitignore", "CHANGELOG.md", "CONTRIBUTING.md", "LICENSE",
-    "README.md", "README.en.md", "SECURITY.md",
+    ".gitignore", "AGENTS.md", "CHANGELOG.md", "CONTRIBUTING.md", "LICENSE",
+    "README.md", "README.en.md", "SECURITY.md", "TRADEMARKS.md",
 }
 ALLOWED_DIRS = {"docs", "scripts", "skills", "tests"}
 DENIED_PARTS = {

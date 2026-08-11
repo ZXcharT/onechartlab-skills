@@ -59,6 +59,8 @@ class RepositoryTests(unittest.TestCase):
     def test_archive_allowlist_and_exclusion_rules(self):
         self.assertEqual(ROOT/"dist", OUT)
         self.assertTrue(include(ROOT/"README.md"))
+        self.assertTrue(include(ROOT/"AGENTS.md"))
+        self.assertTrue(include(ROOT/"TRADEMARKS.md"))
         self.assertTrue(include(ROOT/"skills/agent-cowork-control/SKILL.md"))
         for rel in ["notes.md", ".cache/x", ".pytest_cache/x", ".mypy_cache/x", ".DS_Store", "logs/run.txt", "docs/debug.log", ".env"]:
             self.assertFalse(include(ROOT/rel), rel)
