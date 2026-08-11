@@ -96,12 +96,29 @@ def evaluate(trace):
                 ])
         return "ALLOW" if ready else "BLOCKED"
     if rule == "T07":
-        ready = all([
-            s.get("final") == "ACCEPTED",
-            s.get("final_exists") is True,
-            bool(s.get("build_entry")),
-            s.get("audit_status") == "AUDIT_DONE",
-        ])
+        mode = s.get("mode")
+        if mode in {"direct", "light"}:
+            ready = all([
+                s.get("success_criteria_met") is True,
+                s.get("main_verified") is True,
+            ])
+        elif mode == "controlled":
+            ready = all([
+                s.get("result_review") == "ACCEPTED",
+                s.get("audit_status") == "AUDIT_DONE",
+                s.get("main_accepted") is True,
+            ])
+        else:
+            ready = False
+        if ready and s.get("final_required") is True:
+            ready = all([
+                s.get("final_exists") is True,
+                bool(s.get("official_outputs")),
+                bool(s.get("use_or_reproduce_entry")),
+                bool(s.get("validation_evidence")),
+                s.get("unresolved_items_recorded") is True,
+                s.get("final_consistent") is True,
+            ])
         return "DELIVER" if ready else "FINAL_BARRIER"
     if rule == "T08":
         ready = all([
