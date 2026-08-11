@@ -1,7 +1,7 @@
 ---
 name: agent-cowork-control
-description: "HanaAgent 主子 Agent 协作总控。任务可拆成两个以上独立责任域，且并行、专业分工或反证研究有明确收益时，可启用轻量协作；已有明确协作收益的任务涉及方向或关键口径决策、高风险或难回退执行、多个写入责任域、正式数据生产、权限或外部系统、正式独立验收时升级受控协作。单 Agent 可低成本完成的任务不启用。"
-compatibility: "Target runtime: HanaAgent. Requires subagent, subagent_reply, subagent_close, current_status, workflow identity, current-role child creation, thread lifecycle and read/write access semantics. Claude Code and Codex are static format references only; runtime behavior is unverified."
+description: "主子 Agent 协作总控。任务可拆成两个以上独立责任域，且并行、专业分工或反证研究有明确收益时，可启用轻量协作；已有明确协作收益的任务涉及方向或关键口径决策、高风险或难回退执行、多个写入责任域、正式数据生产、权限或外部系统、正式独立验收时升级受控协作。单 Agent 可低成本完成的任务不启用。"
+compatibility: "Verified runtime: HanaAgent. Requires subagent, subagent_reply, subagent_close, current_status, workflow identity, current-role child creation, thread lifecycle and read/write access semantics. Claude Code and Codex are static format references only; runtime behavior is unverified."
 license: MIT
 metadata:
   version: "0.1.1"
