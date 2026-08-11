@@ -4,7 +4,7 @@
 
 | ID | 行为 | 必须通过 | 必须阻断或改道 |
 |---|---|---|---|
-| T01 | Plan 双通道 | approver 批准，且按身份路由选出的 reviewer 通过独立 read-only 新 thread 审查后执行 | 任一通道、身份、权限或独立 thread 缺失时等待 |
+| T01 | Plan 分层 | 单步明确小范围任务可直接执行；普通多步骤和轻量协作以简短“步骤 → 验证”计划获 approver 确认后执行；受控协作以六段 Plan 同时通过 approver 确认和独立 read-only 新 thread 审查后执行 | 直接执行条件不成立、轻量计划未确认，或受控 Plan 缺少任一确认、身份、权限或独立 thread 时等待 |
 | T02 | 身份路由与 thread | 用户指定优先；否则选择合适专业 Agent；没有合适角色时使用当前角色创建新子 thread | 用户指定不可用、跨角色复用 thread、静默替换或未批准模型覆盖 |
 | T03 | 最小权限 | 研究/验证/审查 read，唯一写者 write | read 角色获得 write |
 | T04 | Canary | Canary 成功且同 thread 后生产 | 失败、未 Canary 或换 thread |

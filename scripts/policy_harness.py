@@ -11,13 +11,25 @@ def evaluate(trace):
     rule = trace["id"]
     s = trace["scenario"]
     if rule == "T01":
-        ready = all([
-            s.get("approver") is True,
-            s.get("review") == "PLAN_OK",
-            bool(s.get("reviewer_agent_id")),
-            s.get("reviewer_thread_new") is True,
-            s.get("reviewer_access") == "read",
-        ])
+        mode = s.get("mode")
+        if mode == "direct":
+            ready = s.get("direct_eligible") is True
+        elif mode == "light":
+            ready = all([
+                s.get("plan_format") == "steps_verify",
+                s.get("approver") is True,
+            ])
+        elif mode == "controlled":
+            ready = all([
+                s.get("plan_format") == "six_section",
+                s.get("approver") is True,
+                s.get("review") == "PLAN_OK",
+                bool(s.get("reviewer_agent_id")),
+                s.get("reviewer_thread_new") is True,
+                s.get("reviewer_access") == "read",
+            ])
+        else:
+            ready = False
         return "EXECUTE" if ready else "WAIT_APPROVAL"
     if rule == "T02":
         source = s.get("selection_source")
