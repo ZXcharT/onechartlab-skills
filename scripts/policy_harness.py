@@ -13,8 +13,8 @@ def evaluate(trace):
     if rule == "T01":
         mode = s.get("mode")
         if mode == "direct":
-            ready = s.get("direct_eligible") is True
-        elif mode == "light":
+            return "EXECUTE" if s.get("direct_eligible") is True else "PLAN_REQUIRED"
+        if mode == "light":
             ready = all([
                 s.get("plan_format") == "steps_verify",
                 s.get("approver") is True,
