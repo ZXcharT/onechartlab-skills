@@ -36,11 +36,16 @@ class RepositoryTests(unittest.TestCase):
             self.assertNotIn(jargon, opening)
     def test_relative_links_and_single_reference_level(self):
         for p in text_files():
+            if p.suffix != ".md":
+                continue
             t=p.read_text(encoding="utf-8")
-            for link in re.findall(r"\]\(([^)]+)\)", t):
-                if "://" not in link and not link.startswith("#"):
-                    self.assertFalse(link.startswith("/"), f"absolute link {p}: {link}")
-                    resolved = (p.parent/link).resolve()
+            links = re.findall(r"\]\(([^)]+)\)", t)
+            links += re.findall(r"(?:src|href)=[\"']([^\"']+)[\"']", t)
+            for link in links:
+                if "://" not in link and not link.startswith(("#", "mailto:", "data:")):
+                    local = link.split("#", 1)[0].split("?", 1)[0]
+                    self.assertFalse(local.startswith("/"), f"absolute link {p}: {link}")
+                    resolved = (p.parent/local).resolve()
                     self.assertTrue(resolved.exists(), f"broken {p}: {link}")
                     if "skills/agent-cowork-control" in str(p):
                         skill_root = (ROOT/"skills/agent-cowork-control").resolve()
@@ -59,6 +64,8 @@ class RepositoryTests(unittest.TestCase):
     def test_archive_allowlist_and_exclusion_rules(self):
         self.assertEqual(ROOT/"dist", OUT)
         self.assertTrue(include(ROOT/"README.md"))
+        self.assertTrue(include(ROOT/"assets/brand/onechart-symbol-black.svg"))
+        self.assertTrue(include(ROOT/"assets/brand/onechart-symbol-white.svg"))
         self.assertTrue(include(ROOT/"AGENTS.md"))
         self.assertTrue(include(ROOT/"TRADEMARKS.md"))
         self.assertTrue(include(ROOT/"skills/agent-cowork-control/SKILL.md"))

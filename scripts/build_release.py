@@ -15,7 +15,7 @@ ALLOWED_ROOT_FILES = {
     ".gitignore", "AGENTS.md", "CHANGELOG.md", "CONTRIBUTING.md", "LICENSE",
     "README.md", "README.en.md", "SECURITY.md", "TRADEMARKS.md",
 }
-ALLOWED_DIRS = {"docs", "scripts", "skills", "tests"}
+ALLOWED_DIRS = {"assets", "docs", "scripts", "skills", "tests"}
 DENIED_PARTS = {
     ".git", "__pycache__", ".cache", ".pytest_cache", ".mypy_cache",
     ".ruff_cache", ".venv", "venv", "node_modules", ".idea", ".vscode",

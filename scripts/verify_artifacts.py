@@ -2,6 +2,7 @@
 """Verify repository ZIP and optional .skill package without extracting unsafely."""
 import argparse
 import hashlib
+import posixpath
 import re
 import zipfile
 from pathlib import PurePosixPath, Path
@@ -22,6 +23,7 @@ PRIVACY_PATTERNS = [
 ]
 SCANNER_ALLOWLIST = {"onechartlab-skills/tests/test_repository.py", "onechartlab-skills/scripts/verify_artifacts.py"}
 LINK_RE = re.compile(r"\]\(([^)]+)\)")
+HTML_LINK_RE = re.compile(r"(?:src|href)=[\"']([^\"']+)[\"']")
 
 
 def safe_member(name):
@@ -42,7 +44,7 @@ def read_text(bundle, name):
         return None
 
 
-def verify_archive(path, expected_top, skill_links=False):
+def verify_archive(path, expected_top, check_links=False):
     errors = []
     with zipfile.ZipFile(path) as bundle:
         names = [name for name in bundle.namelist() if not name.endswith("/")]
@@ -60,17 +62,18 @@ def verify_archive(path, expected_top, skill_links=False):
                 for pattern in PRIVACY_PATTERNS:
                     if pattern.search(text):
                         errors.append(f"privacy finding in {name}: {pattern.pattern}")
-            if skill_links and name.endswith(".md"):
+            if check_links and name.endswith(".md"):
                 base = PurePosixPath(name).parent
-                for link in LINK_RE.findall(text):
-                    if "://" in link or link.startswith("#"):
+                links = LINK_RE.findall(text) + HTML_LINK_RE.findall(text)
+                for link in links:
+                    if "://" in link or link.startswith(("#", "mailto:", "data:")):
                         continue
-                    target = base.joinpath(link)
-                    normalized = PurePosixPath(*[part for part in target.parts if part != "."])
-                    if ".." in normalized.parts or not normalized.parts or normalized.parts[0] != expected_top:
-                        errors.append(f"Skill link escapes package: {name} -> {link}")
+                    local = link.split("#", 1)[0].split("?", 1)[0]
+                    normalized = PurePosixPath(posixpath.normpath(str(base.joinpath(local))))
+                    if not normalized.parts or normalized.parts[0] != expected_top:
+                        errors.append(f"archive link escapes package: {name} -> {link}")
                     elif str(normalized) not in name_set:
-                        errors.append(f"broken Skill link: {name} -> {link}")
+                        errors.append(f"broken archive link: {name} -> {link}")
     return errors
 
 
@@ -97,12 +100,12 @@ def main():
     parser.add_argument("--sha256sums", required=True)
     args = parser.parse_args()
     hashes = read_hashes(args.sha256sums)
-    errors = verify_archive(args.repo_zip, "onechartlab-skills")
+    errors = verify_archive(args.repo_zip, "onechartlab-skills", check_links=True)
     mismatch = verify_hash(args.repo_zip, hashes)
     if mismatch:
         errors.append(mismatch)
     if args.skill:
-        errors.extend(verify_archive(args.skill, "agent-cowork-control", skill_links=True))
+        errors.extend(verify_archive(args.skill, "agent-cowork-control", check_links=True))
         mismatch = verify_hash(args.skill, hashes)
         if mismatch:
             errors.append(mismatch)
