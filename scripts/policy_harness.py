@@ -73,12 +73,27 @@ def evaluate(trace):
             return "BLOCKED"
         return "BACKLOG" if s.get("domain_owned") else "QUERY"
     if rule == "T06":
-        ready = all([
-            s.get("authorized_run_root") is True,
-            s.get("under_run_root") is True,
-            s.get("single_writer") is True,
-            s.get("ownership_conflict") is False,
-        ])
+        if s.get("read_only") is True or s.get("direct_response") is True:
+            ready = s.get("ownership_conflict") is False
+        else:
+            requires_isolation = any(s.get(name) is True for name in (
+                "multiple_write_domains", "batch_or_formal_data", "reproducible_evidence", "intermediate_isolation"
+            ))
+            if requires_isolation:
+                ready = all([
+                    s.get("authorized_run_root") is True,
+                    s.get("under_run_root") is True,
+                    s.get("disjoint_write_dirs") is True,
+                    s.get("single_writer_per_dir") is True,
+                    s.get("ownership_conflict") is False,
+                ])
+            else:
+                ready = all([
+                    s.get("authorized_target") is True,
+                    s.get("single_writer") is True,
+                    s.get("write_overlap") is False,
+                    s.get("ownership_conflict") is False,
+                ])
         return "ALLOW" if ready else "BLOCKED"
     if rule == "T07":
         ready = all([
