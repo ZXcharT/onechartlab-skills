@@ -7,7 +7,7 @@
 | T01 | Plan 分层 | 单步明确小范围任务可直接执行；普通多步骤和轻量协作以简短“步骤 → 验证”计划获 approver 确认后执行；受控协作以六段 Plan 同时通过 approver 确认和独立 read-only 新 thread 审查后执行 | 直接执行条件不成立、轻量计划未确认，或受控 Plan 缺少任一确认、身份、权限或独立 thread 时等待 |
 | T02 | 身份路由与 thread | 用户指定优先；否则选择合适专业 Agent；没有合适角色时使用当前角色创建新子 thread | 用户指定不可用、跨角色复用 thread、静默替换或未批准模型覆盖 |
 | T03 | 最小权限 | 研究/验证/审查 read，唯一写者 write | read 角色获得 write |
-| T04 | Canary | Canary 成功且同 thread 后生产 | 失败、未 Canary 或换 thread |
+| T04 | Canary 按风险触发 | 低成本、只读、结构已知且结果可直接验证的单次调用可直接执行；批量、写入、结构或权限不确定、高成本或高影响调用在 Canary 成功且同 thread 后生产 | 直接执行条件不完整，或应 Canary 的调用未探测、失败、换 thread、换工具范围或换源时阻断 |
 | T05 | QUERY_BACKLOG | 已有责任域的补充查询进入 backlog | 重复派人拉同一责任域 |
 | T06 | 运行隔离 | 授权 run_root 且唯一写者 | 共享目录、归属不明或多写者 |
 | T07 | FINAL 门禁 | FINAL 为 ACCEPTED 后交付 | DRAFT/VALIDATING/NEEDS_REVISION 时最终回复 |

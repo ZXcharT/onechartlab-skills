@@ -50,12 +50,23 @@ def evaluate(trace):
         allowed = (role in READ_ROLES and access == "read") or (role == "writer" and access == "write" and s.get("named_writer") is True)
         return "ALLOW" if allowed else "BLOCKED"
     if rule == "T04":
-        ready = all([
-            s.get("canary") == "OK",
-            s.get("same_thread") is True,
-            s.get("same_tool_scope") is True,
-            s.get("source_changed") is False,
-        ])
+        requires_canary = any(s.get(name) is True for name in (
+            "batch", "writes", "schema_uncertain", "permission_uncertain", "high_cost", "high_impact"
+        ))
+        if not requires_canary:
+            ready = all([
+                s.get("read_only") is True,
+                s.get("low_cost") is True,
+                s.get("structure_known") is True,
+                s.get("directly_verifiable") is True,
+            ])
+        else:
+            ready = all([
+                s.get("canary") == "OK",
+                s.get("same_thread") is True,
+                s.get("same_tool_scope") is True,
+                s.get("source_changed") is False,
+            ])
         return "PRODUCE" if ready else "BLOCKED"
     if rule == "T05":
         if s.get("duplicate_executor") is True:
