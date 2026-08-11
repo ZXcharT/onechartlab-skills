@@ -31,6 +31,7 @@ Plan 一屏内完成，技术细节留在内部任务包。批准后持续执行
 ```markdown
 - delegate_agent：用户指定 / 按职责选择 / current-agent
 - plan_reviewer_agent：用户指定 / 按职责选择 / current-agent
+- result_reviewer_agent：用户指定 / 按职责选择 / current-agent
 - run_root（仅命中写入隔离门槛时）：用户授权工作区中的运行根目录
 ```
 
@@ -181,11 +182,11 @@ read 任务只精简返回；需长篇文件时报告，由主代理另派 write
 ## 验证型任务包
 
 ```markdown
-你是验证型子代理。本次审核将消耗该阶段唯一的审核资格，完成后立即关闭，不进行增量复核。
+你是验证型子代理。本次是 `RESULT_REVIEW` 阶段唯一一次结果审核；Plan 审查不占用本阶段资格。完成后立即关闭，不进行增量复核。
 
 ### 阶段标识与审核资格
 - approved_plan_id：
-- stage_id：
+- audit_stage：RESULT_REVIEW
 - audit_status：NOT_AUDITED
 
 ### 原始目标 / 已批准 Plan / 验收标准
@@ -202,13 +203,14 @@ read 任务只精简返回；需长篇文件时报告，由主代理另派 write
 
 ## Plan 审查任务包
 
-仅六段 Plan 任务使用；按身份路由规则选择审查者，使用 `read`、Plan 审查角色和独立新 thread。Plan 审查消耗该 Plan 阶段唯一审核资格，修订后不再次审查；额外审查仅在用户明确授权时进行。
+仅六段 Plan 任务使用；按身份路由规则选择审查者，使用 `read`、Plan 审查角色和独立新 thread。本次是 `PLAN_REVIEW` 阶段唯一一次 Plan 审查，不占用后续 `RESULT_REVIEW` 资格；修订后不再次审查，额外审查仅在用户明确授权时进行。
 
 ```markdown
 你是 Plan 审查者。只审 Plan，不执行、不写文件。
 
 ### 原始请求
 ### PLAN_DRAFT
+### 审核阶段：PLAN_REVIEW
 ### 审查身份与 thread
 - plan_reviewer_agent：<所选 Agent / current-agent>
 - reviewer_thread：独立新 thread
