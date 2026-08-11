@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.1 — Unreleased
+## 0.1.1 — 2026-08-11
 
 - Added direct, light and controlled execution paths; ordinary multi-step single-Agent work uses a brief approved plan without entering controlled collaboration.
 - Escalated light collaboration when risk, write isolation, formal handoff or other controlled conditions appear.
