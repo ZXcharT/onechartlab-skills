@@ -69,8 +69,8 @@ Plan 一屏内完成，技术细节留在内部任务包。批准后持续执行
 打开方式、运行命令或构建入口
 
 ## 验证状态与证据
-DRAFT / VALIDATING / NEEDS_REVISION / ACCEPTED
 实际执行的验证及结果
+若使用独立审核，记录 DRAFT / VALIDATING / NEEDS_REVISION / ACCEPTED
 
 ## 未解决项
 无 / 具体事项
