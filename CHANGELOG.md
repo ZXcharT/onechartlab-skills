@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+- Redefined collaboration around observable task structure: no collaboration when there is nothing useful to split, light collaboration for ordinary independent work, and controlled collaboration for important, complex, content-heavy or omission-prone tasks.
+- Described controlled collaboration to users as enhanced collaboration, with Plan review, clear ownership and handoffs, uninterrupted communication and independent result review.
+- Separated project safety controls from collaboration level: formal data, permissions, external systems and high-risk operations follow their own safety rules.
+- Made Canary probes depend on call risk, run directories on write/output structure, and `FINAL.md` on handoff needs without automatically escalating collaboration level.
+- Added side-by-side user examples and replaced internal governance language in the user guide with direct explanations.
+
 ## 0.1.1 — 2026-08-11
 
 - Added direct, light and controlled execution paths; ordinary multi-step single-Agent work uses a brief approved plan without entering controlled collaboration.

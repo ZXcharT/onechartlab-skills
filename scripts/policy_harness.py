@@ -12,14 +12,33 @@ def evaluate(trace):
     s = trace["scenario"]
     if rule == "T01":
         mode = s.get("mode")
+        splittable = s.get("splittable") is True
+        enhanced_needed = any(s.get(name) is True for name in (
+            "important", "complex", "content_heavy", "omission_or_drift_risk", "independent_review_requested"
+        ))
         if mode == "direct":
-            return "EXECUTE" if s.get("direct_eligible") is True else "PLAN_REQUIRED"
-        if mode in {"planned", "light"}:
+            return "EXECUTE" if s.get("direct_eligible") is True and not splittable else "PLAN_REQUIRED"
+        if mode == "planned":
             ready = all([
                 s.get("plan_format") == "steps_verify",
                 s.get("approver") is True,
             ])
-        elif mode == "controlled":
+            return "EXECUTE" if ready else "WAIT_APPROVAL"
+        if mode == "light":
+            if not splittable:
+                return "MODE_MISMATCH"
+            if enhanced_needed:
+                return "USE_CONTROLLED"
+            ready = all([
+                s.get("plan_format") == "steps_verify",
+                s.get("approver") is True,
+            ])
+            return "EXECUTE" if ready else "WAIT_APPROVAL"
+        if mode == "controlled":
+            if not splittable:
+                return "MODE_MISMATCH"
+            if not enhanced_needed and s.get("user_selected_enhanced") is not True:
+                return "USE_LIGHT"
             ready = all([
                 s.get("plan_format") == "six_section",
                 s.get("approver") is True,
@@ -28,9 +47,8 @@ def evaluate(trace):
                 s.get("reviewer_thread_new") is True,
                 s.get("reviewer_access") == "read",
             ])
-        else:
-            ready = False
-        return "EXECUTE" if ready else "WAIT_APPROVAL"
+            return "EXECUTE" if ready else "WAIT_APPROVAL"
+        return "MODE_MISMATCH"
     if rule == "T02":
         source = s.get("selection_source")
         if source == "current":
@@ -51,28 +69,24 @@ def evaluate(trace):
         return "ALLOW" if allowed else "BLOCKED"
     if rule == "T04":
         mode = s.get("mode")
+        if mode not in {"direct", "planned", "light", "controlled"}:
+            return "BLOCKED"
         requires_canary = any(s.get(name) is True for name in (
             "batch", "writes", "schema_uncertain", "permission_uncertain", "high_cost", "high_impact"
         ))
-        if mode == "light" and requires_canary:
-            return "ESCALATE_CONTROLLED"
         if not requires_canary:
             ready = all([
-                mode in {"light", "controlled"},
                 s.get("read_only") is True,
-                s.get("low_cost") is True,
                 s.get("structure_known") is True,
                 s.get("directly_verifiable") is True,
             ])
-        elif mode == "controlled":
+        else:
             ready = all([
                 s.get("canary") == "OK",
                 s.get("same_thread") is True,
                 s.get("same_tool_scope") is True,
                 s.get("source_changed") is False,
             ])
-        else:
-            ready = False
         return "PRODUCE" if ready else "BLOCKED"
     if rule == "T05":
         if s.get("duplicate_executor") is True:
@@ -93,8 +107,6 @@ def evaluate(trace):
             requires_isolation = any(s.get(name) is True for name in (
                 "multiple_write_domains", "batch_or_formal_data", "reproducible_evidence", "intermediate_isolation"
             ))
-            if requires_isolation and mode != "controlled":
-                return "ESCALATE_CONTROLLED"
             if requires_isolation:
                 ready = all([
                     s.get("authorized_run_root") is True,
@@ -114,8 +126,6 @@ def evaluate(trace):
     if rule == "T07":
         mode = s.get("mode")
         if mode in {"direct", "planned", "light"}:
-            if s.get("final_required") is True:
-                return "ESCALATE_CONTROLLED"
             ready = all([
                 s.get("success_criteria_met") is True,
                 s.get("main_verified") is True,
