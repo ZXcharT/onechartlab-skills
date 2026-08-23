@@ -10,7 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "dist"
 NAME = "onechartlab-skills"
-VERSION = "0.1.1"
+VERSION = "0.2.0"
 ALLOWED_ROOT_FILES = {
     ".gitignore", "AGENTS.md", "CHANGELOG.md", "CONTRIBUTING.md", "LICENSE",
     "README.md", "README.en.md", "SECURITY.md", "TRADEMARKS.md",

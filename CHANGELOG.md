@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.2.0 — 2026-08-23
 
 - Redefined collaboration around observable task structure: no collaboration when there is nothing useful to split, light collaboration for ordinary independent work, and controlled collaboration for important, complex, content-heavy or omission-prone tasks.
 - Described controlled collaboration to users as enhanced collaboration, with Plan review, clear ownership and handoffs, uninterrupted communication and independent result review.

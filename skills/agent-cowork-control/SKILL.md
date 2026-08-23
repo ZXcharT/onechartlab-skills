@@ -4,7 +4,7 @@ description: "主子 Agent 协作总控。用于用户明确要求多个 Agent �
 compatibility: "Verified runtime: HanaAgent. Requires subagent, subagent_reply, subagent_close, current_status, workflow identity, current-role child creation, thread lifecycle and read/write access semantics. Claude Code and Codex are static format references only; runtime behavior is unverified."
 license: MIT
 metadata:
-  version: "0.1.1"
+  version: "0.2.0"
   run_root_default: "<user-authorized-workspace>/runs/"
 ---
 
