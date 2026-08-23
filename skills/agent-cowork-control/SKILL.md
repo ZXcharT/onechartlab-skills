@@ -1,6 +1,6 @@
 ---
 name: agent-cowork-control
-description: "主子 Agent 协作总控。当用户明确希望多个 Agent 或助手共同完成任务、分别负责不同部分、并行处理，或相互独立检查时使用；也覆盖‘找几个助手分别看看’‘一个查资料、一个检查结果’‘让不同助手各自分析’等自然表达。加载后先判断工作是否真的适合分开做，再根据风险选择轻量或受控协作；一个 Agent 可以低成本完成时不启用。"
+description: "主子 Agent 协作总控。当用户明确希望多个 Agent 或助手共同完成任务、分别负责不同部分、并行处理，或相互独立检查时使用；也覆盖‘找几个助手分别看看’‘一个查资料、一个检查结果’‘让不同助手各自分析’等自然表达。加载后先判断工作是否适合分开做，再根据风险选择普通分工或加强协作。"
 compatibility: "Verified runtime: HanaAgent. Requires subagent, subagent_reply, subagent_close, current_status, workflow identity, current-role child creation, thread lifecycle and read/write access semantics. Claude Code and Codex are static format references only; runtime behavior is unverified."
 license: MIT
 metadata:
